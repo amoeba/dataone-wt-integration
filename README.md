@@ -19,10 +19,13 @@ While approach (1) works and fits well within the reproducibility goals of Whole
 
 Data registration currently happens during the set-up phase along with selecting a front-end image and can register data from a limited set of providers.
 
-TODO: One right now?
-
 For registering data from DataONE, we have implemented a simple DataONE search interface that requires the user to specify a DataONE identiifer which is just about the most difficult way we can come up with for a user to register DataONE data with WholeTale.
 Because DataONE already has a feature-rich [search tool](https://search.dataone.org) (DataONE Search), it makes a lot of sense to also allow registration of data from within DataONE Search.
+
+There are two views where it makes sense to add WholeTale & DataONE integration:
+
+1. The **Catalog**
+2. Each dataset's **Landing Page**
 
 While searching the **Catalog**, a list of datasets matching the user's set of filters is shown:
 
@@ -36,19 +39,19 @@ and when a user clicks on one of those datasets, a **Landing Page** is shown:
 
 I propose DataONE search provides a way for users to register DataONE data into WholeTale in both the **Catalog** and **Landing Page** views.
 
-TODO: Modalities
+To get data into WholeTale, WholeTale only needs to know the identifier because WholeTale already supports the DataONE API. 
+A simple button "Add to WholeTale" on each **Landing Page** would be sufficient.
+However, if a user wants to mix and match a number of datasets which may be contained across numerous, different searches or search pages, they need a way to flag individual datasets for inclusion in their created Tale.
+Therefore, some sort of "Shopping Cart"-like interface seems reasonable where a user can prepare a list of datasets they want to add to their Tale and, after a number of datasets have been added to this list, they can add part of or the entire list to a new Tale.
 
-- Register the current dataset or currently selected datasets to WholeTale
-- Add the current dataset or currently selected datasets to a "Shopping Cart", which then you'd have to click another button to Register with WholeTale
+I propose we integrate DataONE and WholeTale in a two-phase manner.
 
-TODO: Method of registration
-
-- If API, we need to support WT (Globus) auth from within DataOE
-- If redirect, we can rely on existing infrastructure
+- First phase: Just add simple buttons to both views for adding single datasets
+- Second phase: Implement a shopping cart of sorts for adding multiple datasets
 
 ### Implementation details
 
-How this is implemented makes a huge difference in the difficulty of implementation.
+How this is implemented makes a huge difference in terms of the difficulty of implementation.
 The current API already already has a method for registering a dataset, `POST /dataset/register`, which requires a payload like:
 
 ```json
@@ -61,10 +64,11 @@ The current API already already has a method for registering a dataset, `POST /d
 }
 ```
 
-This is (or should be) an authenticated route and, at the present, DataONE authentication knows nothing about WholeTale authentication (*Note: this may change*). 
+A button could, for example, trigger an async request to this endpoint with an appropriate payload and the specified dataset would then be registered in WholeTale.
+I think this is (or should be) an authenticated route and, at present, DataONE authentication knows nothing about WholeTale authentication (*Note: this may change*).
 Therefore, this existing route would is not workable for now.
 
-A way around this is to simply redirect the user to WholeTale to a URL on the **Dashboard** that users query parameters to tell WholeTale which dataset(s) to register, e.g.,
+A way around this is to simply redirect the user over to WholeTale to a view on the **Dashboard** uses prepopulated query parameters to tell WholeTale which dataset(s) to register, e.g.,
 
 `https://search.dataone.org/#view/doi:10.18739/A2JB90 -> https://dashboard.wholetale.org/register/dataone/doi%3A10.18739%2FA2JB90`
 
@@ -79,12 +83,30 @@ A way around this is to simply redirect the user to WholeTale to a URL on the **
 
 ### User flow
 
-How the user navigates through this matters.
+How the user navigates through this process matters particularly because the user may not be familiar with WholeTale and a difficult or confusing user experience could turn the user away. The simplest possible user flow would be to bolt the DataONE side of the interaction directly onto the WholeTale Dashboard as it exists now.
+
+![user flow, extended](images/user-flow_extended.png)
+
+As can be seen in the above image, the user spends a lot of time configuring the WholeTale dashboard just to get started working in their front-end.
+A second, simplified user flow is possible where the choice of front-end and data are automatically pre-filled by the redirect from DataONE:
+
+![user flow, streamlined](images/user-flow_streamlined.png)
 
 ### Catalog integration
 
+![shoppingn cart](images/shopping-cart.png)
+
 ### Landing page integration
 
+With the buttons, I want to get the look and feel right, especially:
+
+- Verbage "Run", "Analyze", etc
+- Give enough explanation to the user as to what it is they're about to do
+
+I've mocked up some button ideas and placed some of them on a landing page to give everyone a feel for how these could look.
+
+![buttons](images/buttons.png)
+![landing page with buttons](images/package_view_branded.png)
 
 ### Decision points
 
