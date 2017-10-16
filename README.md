@@ -19,9 +19,14 @@ While approach (1) works and fits well within the reproducibility goals of Whole
 
 Data registration currently happens during the set-up phase along with selecting a front-end image and can register data from a limited set of providers.
 
-To register data from DataONE into WholeTale, we have implemented a simplified DataONE registration interface that requires the user to specify a DataONE identiifer which is just about the most difficult way we can come up with for a user to register DataONE data with WholeTale.
+To register data from DataONE into WholeTale, we have implemented a simplified DataONE registration interface that requires the user to specify a DataONE identifer which is just about the most difficult way we can come up with for a user to register DataONE data with WholeTale:
+
+![WholeTale's Add Data feature](images/wt-add-data.png)
+
+This interface works for internal testing and development but would be relatively obscure to a real user.
 Because DataONE already has a feature-rich [search tool](https://search.dataone.org) (DataONE Search), it makes a lot of sense to also allow registration of data from within DataONE Search.
 
+DataONE Search is a client-side JavaScript web application that uses an MVC pattern using Backbone.js.
 There are two views where it makes sense to add WholeTale & DataONE integration:
 
 1. The **Catalog**
