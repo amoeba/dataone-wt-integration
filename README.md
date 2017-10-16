@@ -2,10 +2,10 @@
 
 ## Executive Summary
 
-- I'm going to provide an easy way from within [search.dataone.org](https://search.dataone.org) to regsiter datasets into WholeTale
+- We need to provide an easy way from within [search.dataone.org](https://search.dataone.org) to regsiter datasets into WholeTale that is more advanced than the current system
+- This can be done by placing "Add to WholeTale" buttons on DataONE dataset landing pages and/or by providing a "Shopping Cart"-like interface for users to create a collection of datasets to add to WholeTale
 - Until DataONE and WholeTale auth are integrated, the easiest way to do this is by redirecting the user from [search.dataone.org](https://search.dataone.org) to WholeTale with the dataset(s) to be registered set up as query parameters
 - This, while easy for me, will require changes in the **Dashboard** to recognize the redirect request
-- Users will be able to register one or more datasets at a time
 
 ## Background
 
@@ -13,13 +13,13 @@ WholeTale is all about analyzing data so making data available to a running Whol
 There are currently two approaches to get data into WholeTale:
 
 1. From within a running front-end (e.g. RStudio Server), by retrieving data over the Internet with code running in the front-end
-2. Register a dataset before launching the front-end
+2. Register a dataset before launching the front-end (better)
 
 While approach (1) works and fits well within the reproducibility goals of WholeTale, (2) is arguably more formal and, unlike (1), can make use of the WholeTale backend infrastructure to make the registered dataset available to the running front-end which is more efficient.
 
 Data registration currently happens during the set-up phase along with selecting a front-end image and can register data from a limited set of providers.
 
-For registering data from DataONE, we have implemented a simple DataONE search interface that requires the user to specify a DataONE identiifer which is just about the most difficult way we can come up with for a user to register DataONE data with WholeTale.
+To register data from DataONE into WholeTale, we have implemented a simplified DataONE registration interface that requires the user to specify a DataONE identiifer which is just about the most difficult way we can come up with for a user to register DataONE data with WholeTale.
 Because DataONE already has a feature-rich [search tool](https://search.dataone.org) (DataONE Search), it makes a lot of sense to also allow registration of data from within DataONE Search.
 
 There are two views where it makes sense to add WholeTale & DataONE integration:
@@ -46,8 +46,31 @@ Therefore, some sort of "Shopping Cart"-like interface seems reasonable where a 
 
 I propose we integrate DataONE and WholeTale in a two-phase manner.
 
-- First phase: Just add simple buttons to both views for adding single datasets
-- Second phase: Implement a shopping cart of sorts for adding multiple datasets
+- **First phase:** Just add simple buttons to both views for adding single datasets
+- **Second phase:** Implement a shopping cart of sorts for adding multiple datasets
+
+## Mock-ups
+
+### Catalog View Integration (Shopping cart metaphor)
+
+![shopping cart](images/shopping-cart.png)
+
+### Landing Page Integration
+
+With the buttons, I want to get the look and feel right, especially:
+
+- Verbage "Run", "Analyze", etc
+- Give enough explanation to the user as to what it is they're about to do
+
+I've mocked up some button ideas and placed some of them on a landing page to give everyone a feel for how these could look.
+
+#### Buttons
+
+![buttons](images/buttons.png)
+
+#### Button placement ideas
+
+![landing page with buttons](images/package_view_branded.png)
 
 ### Implementation details
 
@@ -91,25 +114,3 @@ As can be seen in the above image, the user spends a lot of time configuring the
 A second, simplified user flow is possible where the choice of front-end and data are automatically pre-filled by the redirect from DataONE:
 
 ![user flow, streamlined](images/user-flow_streamlined.png)
-
-### Catalog integration
-
-![shoppingn cart](images/shopping-cart.png)
-
-### Landing page integration
-
-With the buttons, I want to get the look and feel right, especially:
-
-- Verbage "Run", "Analyze", etc
-- Give enough explanation to the user as to what it is they're about to do
-
-I've mocked up some button ideas and placed some of them on a landing page to give everyone a feel for how these could look.
-
-![buttons](images/buttons.png)
-![landing page with buttons](images/package_view_branded.png)
-
-### Decision points
-
-- Should we do the redirect approach given the downsides?
-- Yes/no on shopping cart idea
-- Verbage / button appearance
